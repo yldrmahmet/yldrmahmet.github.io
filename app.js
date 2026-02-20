@@ -1,30 +1,33 @@
-window.addEventListener("DOMContentLoaded",() => {
-	const github = new IconButton("#github");
-	const linkedin = new IconButton("#linkedin");
-	const cv = new IconButton("#cv");
+window.addEventListener("DOMContentLoaded", () => {
+  const openTrigger = document.querySelector("[data-cv-open]");
+  const modal = document.querySelector("#cv-modal");
+
+  if (!openTrigger || !modal) return;
+
+  const openModal = () => {
+    modal.classList.add("is-open");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("modal-open");
+  };
+
+  const closeModal = () => {
+    modal.classList.remove("is-open");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+  };
+
+  openTrigger.addEventListener("click", (event) => {
+    event.preventDefault();
+    openModal();
+  });
+
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) closeModal();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && modal.classList.contains("is-open")) {
+      closeModal();
+    }
+  });
 });
-
-class IconButton {
-	animClass = "icon-btn--animated";
-
-	constructor(el) {
-		this.el = document.querySelector(el);
-
-		this.init();
-	}
-	init() {
-		const events = ["focus", "mouseover", "touchstart"];
-		events.forEach(ev => {
-			this.el?.addEventListener(ev,this.iconAnimPlay.bind(this));
-		});
-
-		const animEndEl = this.el?.querySelector("[data-anim-end]");
-		animEndEl?.addEventListener("animationend",this.iconAnimStop.bind(this));
-	}
-	iconAnimPlay() {
-		this.el?.classList.add(this.animClass);
-	}
-	iconAnimStop() {
-		this.el?.classList.remove(this.animClass);
-	}
-}

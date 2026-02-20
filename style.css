@@ -6,6 +6,7 @@
 }
 :root {
 	--trans-dur: 0.3s;
+	--ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 	font-size: calc(16px + (24 - 16) * (100vw - 320px) / (2560 - 320));
 }
 body,
@@ -16,7 +17,8 @@ body {
 	background-color: hsl(223,10%,10%);
 	display: flex;
 	flex-direction: column;
-	height: 100vh;
+	min-height: 100vh;
+	min-height: 100dvh;
 	transition:
 		background-color var(--trans-dur),
 		color var(--trans-dur);
@@ -33,7 +35,7 @@ footer {
 }
 header {
 	font-family: Arial, sans-serif;
-	font-size: 1.75em;
+	font-size: 1.45rem;
 	line-height: 1;
 	margin-bottom: 0.2rem;
 	padding: 0 1.25rem;
@@ -54,43 +56,57 @@ header:after {
 }
 main {
 	background-image: radial-gradient(circle at center,hsl(220,84%,78%),hsl(224,67%,61%) 12em);
+	background-size: 115% 115%;
 	color: hsl(0,0%,100%);
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin: auto;
+	gap: 0.9rem;
+	margin: 0;
+	padding: 5.2rem 0.9rem 5rem;
 	position: relative;
-	max-width: 31.4em;
 	width: 100%;
-	min-height: 20em;
+	min-height: 100vh;
+	min-height: 100dvh;
+	height: 100dvh;
+	animation: surfaceShift 14s ease-in-out infinite alternate;
 }
 .btn-block {
-	width: 9em;
+	width: 9.5em;
+	font-size: 1rem;
 	text-align: center;
+	opacity: 0;
+	transform: translateY(10px);
+	animation: blockEnter 480ms var(--ease-out) forwards;
+	transition: color 0.2s ease;
 }
-.btn-block__u {
-	text-decoration: underline;
-}
+.btn-block:nth-of-type(1) { animation-delay: 80ms; }
+.btn-block:nth-of-type(2) { animation-delay: 150ms; }
+.btn-block:nth-of-type(3) { animation-delay: 220ms; }
 .icon-btn {
 	background-color: hsl(0,0%,50%);
 	border-radius: 0.5em;
 	box-shadow:
-		0 0 0 2px hsl(0,0%,100%) inset,
-		-0.25em -0.25em 0.25em hsla(0,0%,0%,0.5) inset;
+		-0.25em -0.25em 0.25em hsla(0,0%,0%,0.5) inset,
+		0 0.3em 0.7em hsla(222,45%,8%,0.24);
 	cursor: pointer;
 	display: flex;
 	margin: 0 auto 0.25em auto;
 	outline: transparent;
 	position: relative;
-	width: 3.3em;
-	height: 3.3em;
+	width: 3.9em;
+	height: 3.9em;
 	-webkit-appearance: none;
 	appearance: none;
 	-webkit-tap-highlight-color: transparent;
 	text-decoration: none;
+	transition:
+		transform 170ms var(--ease-out),
+		box-shadow 170ms var(--ease-out),
+		filter 170ms var(--ease-out);
 }
 .icon-btn:before {
-	background-color: hsla(0,0%,100%,0);
+	background-color: hsla(0,0%,100%,0.02);
 	background-image:
 		radial-gradient(100% 100% at 0 0,hsla(0,0%,100%,0.5),hsla(0,0%,100%,0) 40%),
 		radial-gradient(100% 100% at 90% 90%,hsla(0,0%,100%,0.15),hsla(0,0%,100%,0) 50%);
@@ -100,94 +116,175 @@ main {
 	display: block;
 	position: absolute;
 	inset: 4px;
-	transition: background-color var(--trans-dur);
+	transition: background-color 170ms var(--ease-out);
+}
+.icon-btn:hover,
+.icon-btn:focus-visible {
+	box-shadow:
+		-0.25em -0.25em 0.25em hsla(0,0%,0%,0.48) inset,
+		0 0.45em 0.9em hsla(222,45%,8%,0.36);
+	filter: brightness(1.015);
+	transform: translateY(-1px);
 }
 .icon-btn:focus-visible:before,
 .icon-btn:hover:before {
-	background-color: hsla(0,0%,100%,0.2);
+	background-color: hsla(0,0%,100%,0.09);
+}
+.icon-btn:focus-visible {
+	outline: 2px solid hsla(0,0%,100%,0.85);
+	outline-offset: 3px;
 }
 .icon-btn:active:before {
 	background-color: hsla(0,0%,0%,0.2);
 }
+.icon-btn:active {
+	box-shadow:
+		-0.25em -0.25em 0.25em hsla(0,0%,0%,0.55) inset,
+		0 0.2em 0.35em hsla(222,45%,8%,0.2);
+	filter: brightness(0.98);
+	transform: translateY(0);
+}
 .icon-btn--github { background-color: hsl(220, 15%, 18%); }
 .icon-btn--linkedin { background-color: hsl(210, 89%, 40%); }
-.icon-btn--cv { background-color: hsl(146, 55%, 35%); }
+.icon-btn--cv { background-color: #334155; }
 .icon {
 	margin: auto;
 	pointer-events: none;
-	width: 2.4em;
-	height: 2.4em;
+	width: 2.25em;
+	height: 2.25em;
+	filter: brightness(0) invert(1);
+	transform-origin: 50% 50%;
+	transition: transform 170ms var(--ease-out);
 }
-.icon__part {
-	animation-duration: 1s;
-}
-.icon-btn--animated .icon__part {
-	transform-origin: 12px 12px;
-}
-
-.icon-btn--animated .icon--github .icon__part--1 { animation-name: githubRing; }
-.icon-btn--animated .icon--github .icon__part--2 { animation-name: githubNodeA; }
-.icon-btn--animated .icon--github .icon__part--3 { animation-name: githubNodeB; }
-.icon-btn--animated .icon--github .icon__part--4 {
-	animation-name: githubLink;
-	stroke-dasharray: 9 9;
+.icon-btn:hover .icon,
+.icon-btn:focus-visible .icon {
+	transform: scale(1.02);
 }
 
-.icon-btn--animated .icon--linkedin .icon__part--1 { animation-name: linkedinFrame; }
-.icon-btn--animated .icon--linkedin .icon__part--2 { animation-name: linkedinDot; }
-.icon-btn--animated .icon--linkedin .icon__part--3 { animation-name: linkedinBar; }
-.icon-btn--animated .icon--linkedin .icon__part--4 { animation-name: linkedinBar2; }
-
-.icon-btn--animated .icon--cv .icon__part--1 { animation-name: cvPaper; }
-.icon-btn--animated .icon--cv .icon__part--2 { animation-name: cvFold; }
-.icon-btn--animated .icon--cv .icon__part--3,
-.icon-btn--animated .icon--cv .icon__part--4 {
-	animation-name: cvLine;
-	stroke-dasharray: 12 12;
+.cv-modal {
+	background: hsla(223, 45%, 5%, 0.72);
+	backdrop-filter: blur(4px);
+	inset: 0;
+	opacity: 0;
+	pointer-events: none;
+	position: fixed;
+	transition: opacity 180ms var(--ease-out);
+	visibility: hidden;
+	z-index: 1000;
+}
+.cv-modal.is-open {
+	opacity: 1;
+	pointer-events: auto;
+	visibility: visible;
+}
+.cv-modal__panel {
+	background: hsl(220, 23%, 12%);
+	border: 1px solid hsla(0,0%,100%,0.15);
+	border-radius: 0.9rem;
+	box-shadow: 0 1rem 3rem hsla(220, 45%, 4%, 0.55);
+	height: min(88dvh, 54rem);
+	left: 50%;
+	overflow: hidden;
+	position: absolute;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	width: min(70rem, calc(100vw - 1.2rem));
+}
+.cv-modal__frame {
+	background: #fff;
+	border: 0;
+	display: block;
+	height: 100%;
+	width: 100%;
+}
+body.modal-open {
+	overflow: hidden;
 }
 
-/* Animations */
-@keyframes githubRing {
-	0%, 100% { transform: scale(1) rotate(0deg); }
-	50% { transform: scale(0.88) rotate(12deg); }
+@keyframes blockEnter {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
-@keyframes githubNodeA {
-	0%, 100% { transform: translate(0, 0); }
-	50% { transform: translate(-1px, -1px); }
+@keyframes surfaceShift {
+	from {
+		background-position: 47% 49%;
+	}
+	to {
+		background-position: 53% 51%;
+	}
 }
-@keyframes githubNodeB {
-	0%, 100% { transform: translate(0, 0); }
-	50% { transform: translate(1px, 1px); }
+
+@media (prefers-reduced-motion: reduce) {
+	main,
+	.btn-block {
+		animation: none;
+	}
+	.cv-modal {
+		transition: none;
+	}
+	.icon-btn,
+	.icon-btn:before,
+	.icon {
+		transition: none;
+	}
+	.icon-btn:hover,
+	.icon-btn:focus-visible,
+	.icon-btn:active,
+	.icon-btn:hover .icon,
+	.icon-btn:focus-visible .icon {
+		filter: none;
+		transform: none;
+	}
 }
-@keyframes githubLink {
-	0%, 100% { stroke-dashoffset: 0; opacity: 1; }
-	50% { stroke-dashoffset: 8; opacity: 0.6; }
+
+@media (min-width: 768px) {
+	header {
+		font-size: 1.9rem;
+		padding: 0 1.8rem;
+	}
+	main {
+		gap: 1.8rem;
+		padding: 6rem 1.8rem 5.5rem;
+	}
+	.btn-block {
+		width: 11em;
+		font-size: 1.12rem;
+	}
+	.icon-btn {
+		width: 4.7em;
+		height: 4.7em;
+	}
+	.icon {
+		width: 2.7em;
+		height: 2.7em;
+	}
 }
-@keyframes linkedinFrame {
-	0%, 100% { transform: translateY(0); }
-	50% { transform: translateY(-1px); }
-}
-@keyframes linkedinDot {
-	0%, 100% { transform: scale(1); }
-	50% { transform: scale(1.35); }
-}
-@keyframes linkedinBar {
-	0%, 100% { transform: translateY(0); }
-	50% { transform: translateY(-1px); }
-}
-@keyframes linkedinBar2 {
-	0%, 100% { transform: translateY(0); }
-	50% { transform: translateY(1px); }
-}
-@keyframes cvPaper {
-	0%, 100% { transform: rotate(0deg); }
-	50% { transform: rotate(-7deg); }
-}
-@keyframes cvFold {
-	0%, 100% { transform: translate(0, 0); }
-	50% { transform: translate(0.8px, -0.8px); }
-}
-@keyframes cvLine {
-	0%, 100% { stroke-dashoffset: 0; opacity: 1; }
-	50% { stroke-dashoffset: -8; opacity: 0.65; }
+
+@media (min-width: 1200px) {
+	header {
+		font-size: 2.2rem;
+		padding: 0 2.4rem;
+	}
+	main {
+		gap: 2.7rem;
+		padding: 6.4rem 2.2rem 5.8rem;
+	}
+	.btn-block {
+		width: 12.5em;
+		font-size: 1.28rem;
+	}
+	.icon-btn {
+		width: 5.4em;
+		height: 5.4em;
+	}
+	.icon {
+		width: 3.1em;
+		height: 3.1em;
+	}
 }
