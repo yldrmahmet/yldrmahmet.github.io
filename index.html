@@ -1,39 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ahmet Yıldırım</title>
-    <link rel="stylesheet" href="./style.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Ahmet Yıldırım</title>
+		<link rel="stylesheet" href="./style.css">
+		<link rel="stylesheet" href="https://unpkg.com/xp.css">
+		<script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
     <main>
-	<header>ahmet yıldırım</header>
-	<div class="btn-block">
-		<a id="github" class="icon-btn icon-btn--github" href="https://github.com/yldrmahmet" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-			<img class="icon icon--github" src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/github.svg" alt="" />
-		</a>
-		GitHub
-	</div>
-	<div class="btn-block">
-		<a id="linkedin" class="icon-btn icon-btn--linkedin" href="https://www.linkedin.com/in/yldrmahmet/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-			<img class="icon icon--linkedin" src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/linkedin.svg" alt="" />
-		</a>
-		LinkedIn
-	</div>
-	<div class="btn-block">
-		<a id="cv" class="icon-btn icon-btn--cv" href="./cv.pdf" target="_blank" rel="noopener noreferrer" aria-label="CV" data-cv-open>
-			<img class="icon icon--cv" src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/filetype-pdf.svg" alt="" />
-		</a>
-		CV
-	</div>
-	<footer></footer>
-	</main>
-	<div id="cv-modal" class="cv-modal" role="dialog" aria-modal="true" aria-label="CV preview" aria-hidden="true">
-		<div class="cv-modal__panel">
-			<iframe src="./cv.pdf#view=FitH" class="cv-modal__frame" title="CV PDF Preview"></iframe>
+		<header>ahmet yıldırım</header>
+		<section id="desktop-content" class="desktop-content" aria-hidden="false">
+			<div class="btn-block">
+				<a id="github" class="icon-btn icon-btn--github" href="https://github.com/yldrmahmet" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+					<img class="icon icon--github" src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/github.svg" alt="" />
+				</a>
+				GitHub
+			</div>
+			<div class="btn-block">
+				<a id="linkedin" class="icon-btn icon-btn--linkedin" href="https://www.linkedin.com/in/yldrmahmet/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+					<img class="icon icon--linkedin" src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/linkedin.svg" alt="" />
+				</a>
+				LinkedIn
+			</div>
+			<div class="btn-block">
+				<a id="cv" class="icon-btn icon-btn--cv" href="./cv.pdf" rel="noopener noreferrer" aria-label="CV" data-cv-open>
+					<img class="icon icon--cv" src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/filetype-pdf.svg" alt="" />
+				</a>
+				CV
+			</div>
+		<div class="btn-block">
+			<a id="notes" class="icon-btn icon-btn--notes" href="#" aria-label="Notes">
+				<img class="icon icon--notes" src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/journal-text.svg" alt="" />
+			</a>
+			Notes
 		</div>
-	</div>
-	<script src="./app.js"></script>
+		</section>
+			<section id="notes-panel" class="notes-panel" aria-hidden="true">
+					<div class="window notes-window" role="region" aria-label="Notes window">
+						<div class="title-bar">
+							<div class="title-bar-text">Notes - yldrmahmet</div>
+							<div class="title-bar-controls">
+								<button type="button" aria-label="Minimize" data-window-minimize="notes"></button>
+								<button type="button" aria-label="Maximize" data-window-maximize="notes"></button>
+								<button type="button" aria-label="Close" data-notes-close></button>
+							</div>
+						</div>
+					<div class="window-body notes-window__body">
+						<aside class="notes-window__sidebar" aria-label="Post categories">
+							<ul class="tree-view notes-tree" id="notes-tree">
+								<li>Loading notes...</li>
+							</ul>
+						</aside>
+						<section class="notes-window__posts" id="notes-posts" aria-label="Notes list">
+							<article class="notes-post">
+								<fieldset>
+									<legend>Loading</legend>
+									<p>Markdown files are loading...</p>
+								</fieldset>
+							</article>
+						</section>
+						<section class="field-row notes-actions">
+							<button type="button" data-notes-close>Back to desktop</button>
+						</section>
+					</div>
+					<div class="status-bar">
+						<p class="status-bar-field" id="notes-count">0 posts</p>
+						<p class="status-bar-field" id="notes-source">notes/index.json</p>
+						<p class="status-bar-field">Press Esc to close</p>
+					</div>
+				</div>
+			</section>
+			<section id="cv-panel" class="cv-panel" aria-hidden="true">
+					<div class="window cv-window" role="region" aria-label="CV window">
+						<div class="title-bar">
+							<div class="title-bar-text">CV - yldrmahmet</div>
+							<div class="title-bar-controls">
+								<button type="button" aria-label="Minimize" data-window-minimize="cv"></button>
+								<button type="button" aria-label="Maximize" data-window-maximize="cv"></button>
+								<button type="button" aria-label="Close" data-cv-close></button>
+							</div>
+						</div>
+						<div class="window-body cv-window__body">
+							<iframe src="./cv.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH&zoom=page-width" class="cv-window__frame" title="CV PDF Preview"></iframe>
+						<section class="field-row cv-actions">
+							<button type="button" data-cv-close>Back to desktop</button>
+						</section>
+					</div>
+				</div>
+			</section>
+				<footer>
+					<div class="taskbar" aria-label="Window taskbar">
+						<button type="button" class="taskbar__button" data-window-restore="notes" hidden>Notes</button>
+						<button type="button" class="taskbar__button" data-window-restore="cv" hidden>CV</button>
+					</div>
+				</footer>
+			</main>
+		<script src="./app.js"></script>
 </body>
 </html>
