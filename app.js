@@ -1,4 +1,5 @@
 window.addEventListener("DOMContentLoaded", () => {
+  const bootLoader = document.querySelector("#boot-loader");
   const cvTrigger = document.querySelector("[data-cv-open]");
   const cvPanel = document.querySelector("#cv-panel");
   const cvCloseTriggers = document.querySelectorAll("[data-cv-close]");
@@ -18,6 +19,14 @@ window.addEventListener("DOMContentLoaded", () => {
   const notesMaximizeButton = document.querySelector('[data-window-maximize="notes"]');
   const cvMaximizeButton = document.querySelector('[data-window-maximize="cv"]');
   let notesLoaded = false;
+
+  if (bootLoader) {
+    document.body.classList.add("is-loading");
+    window.setTimeout(() => {
+      bootLoader.classList.add("is-hidden");
+      document.body.classList.remove("is-loading");
+    }, 2000);
+  }
 
   const escapeHtml = (text) =>
     text

@@ -6,6 +6,8 @@
 :root {
 	--trans-dur: 0.3s;
 	--ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+	--boot-bar-width: clamp(0.8rem, 2.4vw, 1.1rem);
+	--boot-bar-gap: 2px;
 	font-size: calc(16px + (24 - 16) * (100vw - 320px) / (2560 - 320));
 }
 body,
@@ -22,6 +24,91 @@ body {
 	transition:
 		background-color var(--trans-dur),
 		color var(--trans-dur);
+}
+body.is-loading {
+	overflow: hidden;
+}
+.boot-loader {
+	align-items: center;
+	background: #000;
+	display: flex;
+	inset: 0;
+	justify-content: center;
+	position: fixed;
+	transition: opacity 260ms ease, visibility 260ms ease;
+	visibility: visible;
+	z-index: 5000;
+}
+.boot-loader.is-hidden {
+	opacity: 0;
+	pointer-events: none;
+	visibility: hidden;
+}
+.boot-loader__content {
+	width: min(92vw, 24rem);
+}
+.boot-logo {
+	color: #fff;
+	margin: 0 auto 1rem;
+	text-align: left;
+	width: 100%;
+}
+.boot-logo p {
+	line-height: 1;
+	margin: 0;
+}
+.boot-logo__top {
+	font-size: clamp(1rem, 3vw, 1.2rem);
+	font-weight: 300;
+}
+.boot-logo__top::after {
+	content: "\00a9";
+	font-size: 0.62em;
+	margin-left: 2px;
+	position: relative;
+	top: -0.35em;
+}
+.boot-logo__mid {
+	font-size: clamp(2.6rem, 10vw, 4rem);
+	font-weight: 700;
+}
+.boot-logo__mid span {
+	color: #ff6821;
+	font-size: clamp(1.2rem, 4vw, 1.9rem);
+	vertical-align: top;
+}
+.boot-logo__bottom {
+	font-size: clamp(1.7rem, 6vw, 2.7rem);
+	font-weight: 300;
+}
+.boot-progress {
+	border: 2px solid #b2b2b2;
+	border-radius: 7px;
+	height: clamp(1rem, 2.6vw, 1.25rem);
+	overflow: hidden;
+	padding: 2px 1px;
+	position: relative;
+	width: 100%;
+}
+.boot-progress__bar {
+	animation: bootSlide 2s linear infinite;
+	background: linear-gradient(to bottom, #2838c7 0%, #5979ef 17%, #869ef3 32%, #869ef3 45%, #5979ef 59%, #2838c7 100%);
+	display: block;
+	height: 100%;
+	left: -14%;
+	position: absolute;
+	top: 0;
+	transform: translateX(calc(var(--offset, 0) * (var(--boot-bar-width) + var(--boot-bar-gap))));
+	width: var(--boot-bar-width);
+}
+.boot-progress__bar:nth-child(1) {
+	--offset: 0;
+}
+.boot-progress__bar:nth-child(2) {
+	--offset: 1;
+}
+.boot-progress__bar:nth-child(3) {
+	--offset: 2;
 }
 header,
 footer {
@@ -370,6 +457,14 @@ body.cv-open .cv-panel {
 		transform: translateY(0);
 	}
 }
+@keyframes bootSlide {
+	0% {
+		left: -14%;
+	}
+	100% {
+		left: 100%;
+	}
+}
 @keyframes surfaceShift {
 	from {
 		background-position: 0% 35%;
@@ -382,6 +477,9 @@ body.cv-open .cv-panel {
 @media (prefers-reduced-motion: reduce) {
 	main,
 	.btn-block {
+		animation: none;
+	}
+	.boot-progress__bar {
 		animation: none;
 	}
 	.icon-btn,
