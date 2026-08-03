@@ -113,6 +113,7 @@ body.is-loading {
 header,
 footer {
 	background-color: hsl(227,73%,35%);
+	color: hsl(0,0%,100%);
 	display: flex;
 	align-items: center;
 	width: 100%;
@@ -151,6 +152,24 @@ footer {
 .taskbar__button[hidden] {
 	display: none !important;
 }
+.taskbar__credit {
+	color: hsl(0,0%,100%);
+	font-size: 0.78rem;
+	margin-left: auto;
+	opacity: 0.85;
+	padding-right: 0.45rem;
+	white-space: nowrap;
+}
+.site-title {
+	font-size: 1em;
+	font-weight: 400;
+	line-height: inherit;
+	text-transform: lowercase;
+}
+.site-tagline {
+	font-size: 0.62em;
+	opacity: 0.85;
+}
 header:after {
 	background-image: linear-gradient(90deg,hsl(220,50%,47%),hsl(215,77%,91%),hsl(220,50%,47%));
 	content: "";
@@ -175,10 +194,17 @@ main {
 	width: 100%;
 	min-height: 100vh;
 	min-height: 100dvh;
-	height: 100dvh;
 	animation: surfaceShift 18s ease-in-out infinite alternate;
 }
 .desktop-content {
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	gap: 1.7rem;
+	justify-content: center;
+	width: 100%;
+}
+.btn-grid {
 	align-items: center;
 	display: flex;
 	gap: 0.9rem;
@@ -203,6 +229,12 @@ body.cv-open .desktop-content {
 .btn-block:nth-of-type(2) { animation-delay: 150ms; }
 .btn-block:nth-of-type(3) { animation-delay: 220ms; }
 .btn-block:nth-of-type(4) { animation-delay: 290ms; }
+.btn-link {
+	color: inherit;
+	display: block;
+	text-decoration: none;
+	outline: none;
+}
 .icon-btn {
 	background-color: hsl(0,0%,50%);
 	border: 0;
@@ -240,7 +272,9 @@ body.cv-open .desktop-content {
 	transition: background-color 170ms var(--ease-out);
 }
 .icon-btn:hover,
-.icon-btn:focus-visible {
+.btn-link:hover .icon-btn,
+.icon-btn:focus-visible,
+.btn-link:focus-visible .icon-btn {
 	box-shadow:
 		-0.25em -0.25em 0.25em hsla(0,0%,0%,0.48) inset,
 		0 0.45em 0.9em hsla(222,45%,8%,0.36);
@@ -248,10 +282,13 @@ body.cv-open .desktop-content {
 	transform: translateY(-1px);
 }
 .icon-btn:focus-visible:before,
-.icon-btn:hover:before {
+.btn-link:focus-visible .icon-btn:before,
+.icon-btn:hover:before,
+.btn-link:hover .icon-btn:before {
 	background-color: hsla(0,0%,100%,0.09);
 }
-.icon-btn:focus-visible {
+.icon-btn:focus-visible,
+.btn-link:focus-visible .icon-btn {
 	outline: 2px solid hsla(0,0%,100%,0.85);
 	outline-offset: 3px;
 }
@@ -270,17 +307,42 @@ body.cv-open .desktop-content {
 .icon-btn--cv { background-color: #334155; }
 .icon-btn--notes { background-color: hsl(38, 65%, 39%); }
 .icon {
+	color: #fff;
 	margin: auto;
 	pointer-events: none;
 	width: 2.25em;
 	height: 2.25em;
-	filter: brightness(0) invert(1);
 	transform-origin: 50% 50%;
 	transition: transform 170ms var(--ease-out);
 }
 .icon-btn:hover .icon,
-.icon-btn:focus-visible .icon {
+.btn-link:hover .icon,
+.icon-btn:focus-visible .icon,
+.btn-link:focus-visible .icon {
 	transform: scale(1.02);
+}
+.welcome {
+	display: flex;
+	justify-content: center;
+	opacity: 0;
+	transform: translateY(10px);
+	animation: blockEnter 480ms var(--ease-out) forwards;
+	animation-delay: 380ms;
+	width: 100%;
+}
+.welcome-window {
+	width: min(92vw, 38rem);
+}
+.welcome-window__body {
+	color: #1f1f1f;
+}
+.welcome-window__body h2 {
+	font-size: 1.05rem;
+	line-height: 1.3;
+	margin-bottom: 0.45rem;
+}
+.welcome-window__body p + p {
+	margin-top: 0.45rem;
 }
 
 .notes-panel {
@@ -385,6 +447,13 @@ body.cv-open .cv-panel {
 	font-size: 1rem;
 	line-height: 1.25;
 }
+.notes-post__title,
+.notes-post legend h2 {
+	display: inline;
+	font-size: inherit;
+	font-weight: inherit;
+	line-height: inherit;
+}
 .notes-post ul,
 .notes-post ol {
 	margin-left: 1.1rem;
@@ -476,8 +545,14 @@ body.cv-open .cv-panel {
 
 @media (prefers-reduced-motion: reduce) {
 	main,
-	.btn-block {
+	.btn-block,
+	.welcome {
 		animation: none;
+	}
+	.btn-block,
+	.welcome {
+		opacity: 1;
+		transform: none;
 	}
 	.boot-progress__bar {
 		animation: none;
@@ -505,7 +580,7 @@ body.cv-open .cv-panel {
 	main {
 		padding: 6rem 1.8rem 5.5rem;
 	}
-	.desktop-content {
+	.btn-grid {
 		gap: 1.8rem;
 	}
 	.btn-block {
@@ -530,7 +605,7 @@ body.cv-open .cv-panel {
 	main {
 		padding: 6.4rem 2.2rem 5.8rem;
 	}
-	.desktop-content {
+	.btn-grid {
 		gap: 2.7rem;
 	}
 	.btn-block {
@@ -548,7 +623,7 @@ body.cv-open .cv-panel {
 }
 
 @media (max-width: 767px) {
-	.desktop-content {
+	.btn-grid {
 		display: grid;
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 		gap: 1rem;

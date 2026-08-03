@@ -3,7 +3,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const cvTrigger = document.querySelector("[data-cv-open]");
   const cvPanel = document.querySelector("#cv-panel");
   const cvCloseTriggers = document.querySelectorAll("[data-cv-close]");
-  const notesTrigger = document.querySelector("#notes");
+  const notesTriggers = document.querySelectorAll("[data-notes-open]");
   const notesPanel = document.querySelector("#notes-panel");
   const desktopContent = document.querySelector("#desktop-content");
   const notesCloseTriggers = document.querySelectorAll("[data-notes-close]");
@@ -20,12 +20,29 @@ window.addEventListener("DOMContentLoaded", () => {
   const cvMaximizeButton = document.querySelector('[data-window-maximize="cv"]');
   let notesLoaded = false;
 
+  const hasBooted = () => {
+    try {
+      return sessionStorage.getItem("booted") === "1";
+    } catch {
+      return false;
+    }
+  };
+
   if (bootLoader) {
-    document.body.classList.add("is-loading");
-    window.setTimeout(() => {
+    if (hasBooted()) {
       bootLoader.classList.add("is-hidden");
-      document.body.classList.remove("is-loading");
-    }, 2000);
+    } else {
+      document.body.classList.add("is-loading");
+      window.setTimeout(() => {
+        bootLoader.classList.add("is-hidden");
+        document.body.classList.remove("is-loading");
+        try {
+          sessionStorage.setItem("booted", "1");
+        } catch {
+          /* storage unavailable */
+        }
+      }, 2000);
+    }
   }
 
   const escapeHtml = (text) =>
@@ -86,7 +103,7 @@ window.addEventListener("DOMContentLoaded", () => {
         (entry, index) => `
           <article class="notes-post" id="note-${index + 1}">
             <fieldset>
-              <legend>${escapeHtml(entry.title)}</legend>
+              <legend><h2 class="notes-post__title">${escapeHtml(entry.title)}</h2></legend>
               ${renderMarkdown(entry.markdown)}
             </fieldset>
           </article>
@@ -104,7 +121,7 @@ window.addEventListener("DOMContentLoaded", () => {
     if (!notesTree || !notesPosts) return;
 
     try {
-      const manifestResponse = await fetch("./notes/index.json", { cache: "no-store" });
+      const manifestResponse = await fetch("./notes/index.json");
       if (!manifestResponse.ok) throw new Error("manifest_missing");
 
       const manifest = await manifestResponse.json();
@@ -115,9 +132,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
       const entries = [];
       for (const fileName of markdownFiles) {
-        const noteResponse = await fetch(`./notes/${encodeURIComponent(fileName)}`, {
-          cache: "no-store",
-        });
+        const noteResponse = await fetch(`./notes/${encodeURIComponent(fileName)}`);
         if (!noteResponse.ok) continue;
         const markdown = await noteResponse.text();
         const fallbackTitle = fileName.replace(/\.md$/i, "");
@@ -206,6 +221,13 @@ window.addEventListener("DOMContentLoaded", () => {
     if (win?.restoreButton) win.restoreButton.hidden = true;
 
     if (name === "notes") void loadNotes();
+    if (name === "cv") {
+      const frame = cvPanel?.querySelector("iframe[data-src]");
+      if (frame) {
+        frame.src = frame.dataset.src;
+        frame.removeAttribute("data-src");
+      }
+    }
   };
 
   const closeWindow = (name) => {
@@ -243,10 +265,12 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  if (notesTrigger && notesPanel) {
-    notesTrigger.addEventListener("click", (event) => {
-      event.preventDefault();
-      openWindow("notes");
+  if (notesPanel) {
+    notesTriggers.forEach((trigger) => {
+      trigger.addEventListener("click", (event) => {
+        event.preventDefault();
+        openWindow("notes");
+      });
     });
   }
 
@@ -297,6 +321,8 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+
+  void loadNotes();
 
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") return;
