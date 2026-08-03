@@ -1,6 +1,6 @@
 window.addEventListener("DOMContentLoaded", () => {
   const bootLoader = document.querySelector("#boot-loader");
-  const cvTrigger = document.querySelector("[data-cv-open]");
+  const cvTriggers = document.querySelectorAll("[data-cv-open]");
   const cvPanel = document.querySelector("#cv-panel");
   const cvCloseTriggers = document.querySelectorAll("[data-cv-close]");
   const notesTriggers = document.querySelectorAll("[data-notes-open]");
@@ -252,10 +252,12 @@ window.addEventListener("DOMContentLoaded", () => {
     setMaximized(name, next);
   };
 
-  if (cvTrigger && cvPanel) {
-    cvTrigger.addEventListener("click", (event) => {
-      event.preventDefault();
-      openWindow("cv");
+  if (cvPanel) {
+    cvTriggers.forEach((trigger) => {
+      trigger.addEventListener("click", (event) => {
+        event.preventDefault();
+        openWindow("cv");
+      });
     });
   }
 
